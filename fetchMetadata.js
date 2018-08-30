@@ -120,12 +120,17 @@ apps.writeToFile(qrsInteractInstance, appsPath).then(function (ids) {
         dataRow.push(new Date().toJSON());
         return appsEngine.writeToFile(appSession, element, sessionObjectParams, visualizationsPath, metricsPath).then(function () {
             console.log("Done app " + (index + 1) + " of " + ids.length);
-            dataRow.push("Success");
-            dataRow.push("OK");
         }).catch(function (err) {
             dataRow.push("Fail");
             dataRow.push(err);
-        }).then(function () {
+        }).then(function (outString) {
+            if (outString == undefined || outString.length == 0) {
+                dataRow.push("Success");
+                dataRow.push("OK");
+            } else {
+                dataRow.push("Error");
+                dataRow.push(outString);
+            }
             dataMatrix.push(dataRow);
         });
     }).then(function () {
